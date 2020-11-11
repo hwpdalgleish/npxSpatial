@@ -1,5 +1,5 @@
 # npxSpatial
-Tools to analyse Neuropixels probe data in a spatial navigation context.
+Tools to analyse Neuropixels probe data in a spatial navigation context. Refer to _example.m_ for intro to basic loading and plotting.
 
 Note this requires the following dependencies:
 - Phy/neuropixels file handling: https://github.com/cortex-lab/spikes/
