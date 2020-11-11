@@ -1,0 +1,16 @@
+spkFile: spike_times.npy
+posFile: data_array.npy
+posTFile: timestamps.npy
+syncFile: sync_messages.txt
+lfpFile: continuous.dat
+settingsFile: settings.xml
+
+lfpRe: Neuropix-PXI-[0-9][0-9][0-9]
+spkRe: Neuropix-PXI-[0-9][0-9][0-9]
+spkId: 0
+lfpId: 1
+
+nChannels: 384
+posSampleRate: 30
+pixelsPerMetre: 400
+jumpMax: 5 # in m/s

@@ -1,0 +1,331 @@
+%%
+load('dataframe_example.mat')
+
+%% %%%%%%%%%%%%%%%%%%%%%%%% CONCATENATING %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% setup for cat tests
+df1 = clInfo(1:10,:);
+df2 = clInfo(21:30,:);
+df3 = df1({'fr' 'ch'});
+df4 = df1({'sh' 'Amplitude'});
+
+%% vertcat
+df5 = [df1 ; df2];
+df5
+
+%% horzcat
+df6 = [df3 df4];
+df6
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%% REFERENCING %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% types of referencing - 1 dimension input (named)
+c = clInfo(1:5,:);
+clc
+
+c.ch
+c.({'ch' 'fr'})
+
+c('ch')
+c({'ch' 'fr'})
+
+c{'ch'}
+c{{'ch' 'fr'}}
+
+%% types of referencing - 1 dimensional input (numbered)
+c = clInfo(1:5,:);
+lIdx = false(1,c.width()); lIdx([1 2]) = true;
+clc
+
+c.(lIdx)
+c(1:2)
+c(lIdx)
+c{1:2}
+c{lIdx}
+
+%% types of referencing - 2 dimension input
+c = clInfo(1:5,:);
+lIdx = false(c.height,1); lIdx(1:3) = true;
+clc
+
+c.ch(:)
+c.ch(1:3)
+c.ch(lIdx)
+
+c.ch{:}
+c.ch{1:3}
+c.ch{lIdx}
+
+c(:,'ch')
+c(1:3,'ch')
+c(lIdx,'ch')
+
+c{:,'ch'}
+c{1:3,'ch'}
+c{lIdx,'ch'}
+
+c(:,{'ch' 'fr'})
+c(1:3,{'ch' 'fr'})
+c(lIdx,{'ch' 'fr'})
+
+c{:,{'ch' 'fr'}}
+c{1:3,{'ch' 'fr'}}
+c{lIdx,{'ch' 'fr'}}
+
+%% types of referenceing with loc
+c = clInfo(1:5,:);
+lIdx = false(c.height,1); lIdx([1 2]) = true;
+clc
+
+c.loc(:,'ch')
+c.loc(:,{'ch' 'fr'})
+
+c.loc(0,'ch')
+c.loc(0,{'ch' 'fr'})
+
+c.loc([0 1],'ch')
+c.loc([0 1],{'ch' 'fr'})
+c.loc(lIdx,'ch')
+c.loc(lIdx,{'ch' 'fr'})
+
+c.loc{:,'ch'}
+c.loc{:,{'ch' 'fr'}}
+
+c.loc{0,'ch'}
+c.loc{0,{'ch' 'fr'}}
+
+c.loc{[0 1],'ch'}
+c.loc{[0 1],{'ch' 'fr'}}
+c.loc{lIdx,'ch'}
+c.loc{lIdx,{'ch' 'fr'}}
+
+%% Referencing but with string outputs
+c = clInfo(1:5,:);
+lIdx = false(c.height,1); lIdx([1 2]) = true;
+clc
+
+c.({'KSLabel' 'group'})
+
+c({'KSLabel' 'group'})
+c{{'KSLabel' 'group'}}
+
+c(:,{'KSLabel' 'group'})
+c{:,{'KSLabel' 'group'}}
+
+c([1 2],{'KSLabel' 'group'})
+c{[1 2],{'KSLabel' 'group'}}
+
+c(lIdx,{'KSLabel' 'group'})
+c{lIdx,{'KSLabel' 'group'}}
+
+c.loc(:,{'KSLabel' 'group'})
+c.loc{:,{'KSLabel' 'group'}}
+
+c.loc([0 1],{'KSLabel' 'group'})
+c.loc{[0 1],{'KSLabel' 'group'}}
+
+c.loc(lIdx,{'KSLabel' 'group'})
+c.loc{lIdx,{'KSLabel' 'group'}}
+
+%% Single dimension referencing with loc (should throw error)
+clc
+c.loc([0 1])
+
+%% Single dimension referencing with loc (should throw error)
+clc
+c.loc{[0 1]}
+
+%% Attempt to return a matrix that contains strings (should throw error)
+c{{'group' 'fr'}}
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%%% ASSIGNING %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Assigning numbers, field reference + ()
+c = clInfo(1:5,:);
+clc
+c.h1 = 1;
+c.h2(3) = 1;
+c.h3(1:3) = 1;
+c.h3(2) = 100;
+c.h3(4:5) = [10 20];
+c
+
+%% Assigning numbers, field reference + {}
+c = clInfo(1:5,:);
+clc
+c.h1 = 1;
+c.h2{3} = 1;
+c.h3{1:3} = 1;
+c.h3{2} = 100;
+c.h3{4:5} = [10 20];
+c
+
+%% Assigning strings, field reference + ()
+c = clInfo(1:5,:);
+clc
+c.h1 = 'h';
+c.h2(3) = 'h';
+c.h3(1:3) = 'h';
+c.h3(2) = 'j';
+c.h3(4:5) = {'k' 'l'};
+c
+
+%% Assigning strings, field reference + {}
+c = clInfo(1:5,:);
+clc
+c.h1 = 'h';
+c.h2{3} = 'h';
+c.h3{1:3} = 'h';
+c.h3{2} = 'j';
+c.h3{4:5} = {'k' 'l'};
+c
+
+%% Assigning numbers, () reference
+c = clInfo(1:5,:);
+clc
+c(:,'h1') = 1;
+c(3,'h2') = 1;
+c(1:3,'h3') = 1;
+c(2,'h3') = 2;
+c(4:5,'h3') = [3 4];
+c
+
+%% Assigning numbers, {} reference
+c = clInfo(1:5,:);
+clc
+c{:,'h1'} = 1;
+c{3,'h2'} = 1;
+c{1:3,'h3'} = 1;
+c{2,'h3'} = 2;
+c{4:5,'h3'} = [3 4];
+c
+
+%% Assigning strings, () reference
+c = clInfo(1:5,:);
+clc
+c(:,'h1') = 'h';
+c(3,'h2') = 'h';
+c(1:3,'h3') = 'h';
+c(2,'h3') = 'j';
+c(4:5,'h3') = {'k' 'l'};
+c
+
+%% Assigning strings, {} reference
+c = clInfo(1:5,:);
+clc
+c{:,'h1'} = 'h';
+c{3,'h2'} = 'h';
+c{1:3,'h3'} = 'h';
+c{2,'h3'} = 'j';
+c{4:5,'h3'} = {'k' 'l'};
+c
+
+%% Assigning numbers, loc + () reference
+c = clInfo(1:5,:);
+clc
+c.loc(:,'h1') = 1;
+c.loc(0,'h2') = 1;
+c.loc([0 1 2],'h3') = 1;
+c.loc(1,'h3') = 2;
+c.loc([3 4],'h3') = [3 4];
+c
+
+%% Assigning numbers, loc + {} reference
+c = clInfo(1:5,:);
+clc
+c.loc{:,'h1'} = 1;
+c.loc{0,'h2'} = 1;
+c.loc{[0 1 2],'h3'} = 1;
+c.loc{1,'h3'} = 2;
+c.loc{[3 4],'h3'} = [3 4];
+c
+
+%% Assigning strings, loc + () reference
+c = clInfo(1:5,:);
+clc
+c.loc(:,'h1') = 'h';
+c.loc(0,'h2') = 'h';
+c.loc([0 1 2],'h3') = 'h';
+c.loc(1,'h3') = 'j';
+c.loc([3 4],'h3') = {'k' 'l'};
+c
+
+%% Assigning strings, loc + {} reference
+c = clInfo(1:5,:);
+clc
+c.loc{:,'h1'} = 'h';
+c.loc{0,'h2'} = 'h';
+c.loc{[0 1 2],'h3'} = 'h';
+c.loc{1,'h3'} = 'j';
+c.loc{[3 4],'h3'} = {'k' 'l'};
+c
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%% DELETING %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Single column
+c = clInfo(1:5,:);
+clc
+c
+c.ch = [];
+c.({'sh'}) = [];
+c('fr') = [];
+c{'depth'} = [];
+c.loc(:,'amp') = [];
+c
+
+%% Multi column
+c = clInfo(1:5,:);
+clc
+c
+c.({'ch' 'sh'}) = [];
+c({'fr' 'depth'}) = [];
+c{{'group' 'ContamPct'}} = [];
+c.loc(:,{'amp' 'Amplitude'}) = [];
+c
+
+%% Single row
+c = clInfo(1:5,:);
+clc
+c
+c(1,:) = []
+c{1,:} = []
+c.loc(3,:) = []
+
+%% Multi row
+c = clInfo(1:10,:);
+clc
+c
+c([1 2],:) = []
+c{[1 2],:} = []
+c.loc([9 10],:) = []
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%% METHODS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+c = clInfo(1:10,:);
+clc
+c.loc([0 3],:).toCell
+
+%%
+c = clInfo(1:10,:);
+clc
+c.loc([0 3],:).toCell()
+
+%% 
+clc
+c.toCell
+
+% field
+c.ch(:).toCell()
+c.ch(1:2).toCell()
+c.({'ch' 'fr'})(:).toCell()
+c.({'ch' 'fr'})(1:2).toCell()
+
+% ()
+c('ch').toCell
+c(1:2,'ch').toCell
+c({'ch' 'fr'}).toCell
+c(1:2,{'ch' 'fr'}).toCell
+
+% loc
+c.loc(:,'ch').toCell
+c.loc(:,{'ch' 'fr'}).toCell
+c.loc([0 1],'ch').toCell
+c.loc([0 1],{'ch' 'fr'}).toCell
+
+%%
+c.loc([1 0],{'ch' 'fr'}).varfun(@mean)
